@@ -88,25 +88,6 @@ export function AddressQRModal({ address, onClose, isOpen }: AddressQRModalProps
                 </button>
               </div>
             </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Short Address
-              </label>
-              <div className="px-3 py-2 bg-gray-50 border border-gray-300 rounded-md font-mono text-sm text-gray-600">
-                {formatAddress(address)}
-              </div>
-            </div>
-          </div>
-
-          {/* Instructions */}
-          <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-            <h4 className="text-sm font-medium text-blue-900 mb-2">How to use:</h4>
-            <ul className="text-sm text-blue-800 space-y-1">
-              <li>• Share the QR code for others to scan</li>
-              <li>• Copy the address to share via text</li>
-              <li>• Others can transfer batches to this address</li>
-            </ul>
           </div>
         </div>
 
