@@ -5,16 +5,19 @@ import { Contract, JsonRpcProvider, type Signer, type Provider } from 'ethers';
 
 // BatchTracker ABI
 const BATCH_TRACKER_ABI = [
-  "function createBatch() external returns (uint256)",
+  "function createBatch(string memory _ipfsHash) external returns (uint256)",
   "function transferBatch(uint256 _batchId, address _newOwner) external",
+  "function updateMetadata(uint256 _batchId, string memory _newIpfsHash) external",
   "function getCurrentOwner(uint256 _batchId) external view returns (address)",
   "function getOwnerHistory(uint256 _batchId) external view returns (address[] memory)",
-  "function getBatchInfo(uint256 _batchId) external view returns (uint256 batchId, address currentOwner, uint256 ownerCount, uint256 createdAt, uint256 lastTransferAt)",
+  "function getBatchInfo(uint256 _batchId) external view returns (uint256 batchId, address currentOwner, uint256 ownerCount, uint256 createdAt, uint256 lastTransferAt, string memory ipfsHash)",
   "function getTotalBatches() external view returns (uint256)",
   "function getOwnerCount(uint256 _batchId) external view returns (uint256)",
   "function wasOwner(uint256 _batchId, address _address) external view returns (bool)",
-  "event BatchCreated(uint256 indexed batchId, address indexed creator, uint256 timestamp)",
-  "event BatchTransferred(uint256 indexed batchId, address indexed from, address indexed to, uint256 timestamp)"
+  "function batchExists(uint256 _batchId) external view returns (bool)",
+  "event BatchCreated(uint256 indexed batchId, address indexed creator, uint256 timestamp, string ipfsHash)",
+  "event BatchTransferred(uint256 indexed batchId, address indexed from, address indexed to, uint256 timestamp)",
+  "event MetadataUpdated(uint256 indexed batchId, string oldIpfsHash, string newIpfsHash, uint256 timestamp)"
 ];
 
 // Network configs

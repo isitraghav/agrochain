@@ -3,7 +3,7 @@ import { BatchTrackerApp } from "../components/batch-tracker-app";
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "BatchTracker DApp" },
+    { title: "AgroChain" },
     { name: "description", content: "Blockchain-based batch tracking application" },
   ];
 }

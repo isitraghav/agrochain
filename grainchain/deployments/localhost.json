@@ -5,8 +5,8 @@
     "BatchTracker": {
       "address": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
       "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
-      "deploymentTime": "2025-09-19T23:49:10.808Z",
-      "transactionHash": "0x93ebf5ba2d9d5ce4433244bda7e815124c4888e049f2968f6ecde86c52408aca"
+      "deploymentTime": "2025-09-20T03:45:29.845Z",
+      "transactionHash": "0xfa66ff0a05527689607926da53bd15d3ff7e3e9e6a2e59ef0c0e02e4c5a65723"
     }
   }
 }

@@ -204,7 +204,7 @@ export async function createBatchWithMetadata(
     const contract = getBatchTrackerContract(signer, chainId);
 
     console.log('Sending blockchain transaction...');
-    const tx = await contract.createBatch();
+    const tx = await contract.createBatch(metadataHash);
 
     console.log('Transaction sent:', tx.hash);
     console.log('Waiting for confirmation...');
@@ -251,7 +251,7 @@ export async function createBatch(signer: ethers.Signer): Promise<number> {
     const contract = getBatchTrackerContract(signer, chainId);
 
     console.log('Sending transaction...');
-    const tx = await contract.createBatch();
+    const tx = await contract.createBatch("");
 
     console.log('Transaction sent:', tx.hash);
     console.log('Waiting for confirmation...');
@@ -319,16 +319,13 @@ export async function getBatchInfo(
   const contract = getBatchTrackerContract(provider, chainId);
   const result = await contract.getBatchInfo(batchId);
 
-  // Get IPFS hash from local storage
-  const ipfsHash = MetadataStorage.getBatchMetadata(batchId);
-
   const batchInfo: BatchInfo = {
     batchId: Number(result[0]),
     currentOwner: result[1],
     ownerCount: Number(result[2]),
     createdAt: Number(result[3]),
     lastTransferAt: Number(result[4]),
-    ipfsHash: ipfsHash || undefined
+    ipfsHash: result[5] || undefined
   };
 
   return batchInfo;
