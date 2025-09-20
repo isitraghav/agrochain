@@ -1,4 +1,4 @@
-# Batch Tracker - Blockchain-Based Batch Tracking System
+# AgroChain - Blockchain-Based Batch Tracking System
 
 A Solidity smart contract system for tracking batch ownership and transfers on the Ethereum blockchain. This project provides a decentralized solution for tracking batches through their lifecycle as they change ownership.
 
