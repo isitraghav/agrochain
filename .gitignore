@@ -94,3 +94,5 @@ typechain-types
 
 # Gas usage reports
 gas-report.txt
+
+node_modules/
