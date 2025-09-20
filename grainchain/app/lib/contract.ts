@@ -4,6 +4,24 @@ import { pinataService } from './pinata';
 import { MetadataStorage } from './metadata-storage';
 import type { BatchFormData } from '../types/batch';
 
+// Create a public provider for read-only operations
+export function createPublicProvider(): ethers.Provider {
+  try {
+    // Default to localhost for development - in production, this should be configurable
+    return new ethers.JsonRpcProvider('http://127.0.0.1:8545');
+  } catch (error) {
+    throw new Error('Failed to create public provider. Please ensure the blockchain network is accessible.');
+  }
+}
+
+// Get provider with fallback to public provider
+export function getProviderWithFallback(connectedProvider?: ethers.Provider | null): ethers.Provider {
+  if (connectedProvider) {
+    return connectedProvider;
+  }
+  return createPublicProvider();
+}
+
 // Enhanced error handling
 export function enhanceError(error: any): Error {
   console.error('Raw error object:', error);
@@ -315,21 +333,26 @@ export async function getBatchInfo(
   provider: ethers.Provider,
   batchId: number
 ): Promise<BatchInfo> {
-  const network = await provider.getNetwork();
-  const chainId = Number(network.chainId);
-  const contract = getBatchTrackerContract(provider, chainId);
-  const result = await contract.getBatchInfo(batchId);
+  try {
+    const network = await provider.getNetwork();
+    const chainId = Number(network.chainId);
+    const contract = getBatchTrackerContract(provider, chainId);
+    const result = await contract.getBatchInfo(batchId);
 
-  const batchInfo: BatchInfo = {
-    batchId: Number(result[0]),
-    currentOwner: result[1],
-    ownerCount: Number(result[2]),
-    createdAt: Number(result[3]),
-    lastTransferAt: Number(result[4]),
-    ipfsHash: result[5] || undefined
-  };
+    const batchInfo: BatchInfo = {
+      batchId: Number(result[0]),
+      currentOwner: result[1],
+      ownerCount: Number(result[2]),
+      createdAt: Number(result[3]),
+      lastTransferAt: Number(result[4]),
+      ipfsHash: result[5] || undefined
+    };
 
-  return batchInfo;
+    return batchInfo;
+  } catch (error) {
+    console.error('Error fetching batch info:', error);
+    throw new Error(`Failed to fetch batch information: ${error instanceof Error ? error.message : 'Unknown error'}`);
+  }
 }
 
 export async function getBatchInfoWithMetadata(

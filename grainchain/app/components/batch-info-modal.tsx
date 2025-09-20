@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useWeb3 } from '../lib/web3-context';
 import { getOwnerHistory, getBatchInfoWithMetadata, type BatchInfo } from '../lib/contract';
 import { pinataService } from '../lib/pinata';
+import { QRCodeGenerator, QRCodeButton } from './qr-code-generator';
 import type { BatchMetadata } from '../types/batch';
 
 interface BatchInfoModalProps {
@@ -25,6 +26,7 @@ export function BatchInfoModal({ batch, onClose, onTransferClick }: BatchInfoMod
   const [isLoadingMetadata, setIsLoadingMetadata] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [imageError, setImageError] = useState(false);
+  const [showQRCode, setShowQRCode] = useState(false);
 
   useEffect(() => {
     const fetchBatchData = async () => {
@@ -122,12 +124,20 @@ export function BatchInfoModal({ batch, onClose, onTransferClick }: BatchInfoMod
                 </span>
               </div>
             </div>
-            <button
-              onClick={onClose}
-              className="text-gray-400 hover:text-gray-600 text-2xl font-bold"
-            >
-              ×
-            </button>
+            <div className="flex items-center gap-2">
+              <QRCodeButton
+                batch={currentBatch!}
+                onShowQR={() => setShowQRCode(true)}
+                size="sm"
+                variant="icon"
+              />
+              <button
+                onClick={onClose}
+                className="text-gray-400 hover:text-gray-600 text-2xl font-bold"
+              >
+                ×
+              </button>
+            </div>
           </div>
         </div>
 
@@ -400,6 +410,28 @@ export function BatchInfoModal({ batch, onClose, onTransferClick }: BatchInfoMod
           </div>
         </div>
       </div>
+
+      {/* QR Code Modal */}
+      {showQRCode && currentBatch && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-60 p-4">
+          <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-semibold text-gray-900">Share Batch</h3>
+              <button
+                onClick={() => setShowQRCode(false)}
+                className="text-gray-400 hover:text-gray-600 text-xl font-bold"
+              >
+                ×
+              </button>
+            </div>
+            <QRCodeGenerator
+              batch={currentBatch}
+              size={200}
+              showControls={true}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

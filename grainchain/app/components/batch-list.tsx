@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useWeb3 } from '../lib/web3-context';
 import { getUserOwnedBatches, getBatchInfoWithMetadata, type BatchInfo } from '../lib/contract';
+import { QRCodeGenerator, QRCodeButton } from './qr-code-generator';
 import type { BatchMetadata } from '../types/batch';
 
 interface BatchListProps {
@@ -16,6 +17,7 @@ export function BatchList({ refreshTrigger, onTransferClick, onBatchClick }: Bat
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingMetadata, setIsLoadingMetadata] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [qrBatch, setQrBatch] = useState<BatchInfo | null>(null);
 
   const loadBatches = async () => {
     if (!provider || !account) return;
@@ -177,18 +179,56 @@ export function BatchList({ refreshTrigger, onTransferClick, onBatchClick }: Bat
                   </div>
                 </div>
 
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onTransferClick(batch);
-                  }}
-                  className="ml-4 px-4 py-2 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700 transition-colors"
-                >
-                  Transfer
-                </button>
+                <div className="flex items-center gap-2 ml-4">
+                  <div
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setQrBatch(batch);
+                    }}
+                  >
+                    <QRCodeButton
+                      batch={batch}
+                      onShowQR={() => setQrBatch(batch)}
+                      size="sm"
+                      variant="icon"
+                      className="mr-2"
+                    />
+                  </div>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onTransferClick(batch);
+                    }}
+                    className="px-4 py-2 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700 transition-colors"
+                  >
+                    Transfer
+                  </button>
+                </div>
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {/* QR Code Modal */}
+      {qrBatch && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-semibold text-gray-900">Share Batch</h3>
+              <button
+                onClick={() => setQrBatch(null)}
+                className="text-gray-400 hover:text-gray-600 text-xl font-bold"
+              >
+                ×
+              </button>
+            </div>
+            <QRCodeGenerator
+              batch={qrBatch}
+              size={200}
+              showControls={true}
+            />
+          </div>
         </div>
       )}
     </div>
