@@ -195,7 +195,8 @@ export async function createBatchWithMetadata(
       formData.description,
       formData.image,
       batchProperties,
-      formData.attributes
+      formData.attributes,
+      formData.external_url
     );
 
     console.log('Metadata uploaded to IPFS with hash:', metadataHash);

@@ -211,7 +211,8 @@ export class PinataService {
     description: string,
     imageHash?: string,
     properties?: BatchMetadata['batch_properties'],
-    attributes?: BatchMetadata['attributes']
+    attributes?: BatchMetadata['attributes'],
+    external_url?: string
   ): BatchMetadata {
     const metadata: BatchMetadata = {
       name,
@@ -226,6 +227,10 @@ export class PinataService {
       metadata.image = `${PINATA_GATEWAY}/ipfs/${imageHash}`;
     }
 
+    if (external_url) {
+      metadata.external_url = external_url;
+    }
+
     return metadata;
   }
 
@@ -237,7 +242,8 @@ export class PinataService {
     description: string,
     image?: File,
     properties?: BatchMetadata['batch_properties'],
-    attributes?: BatchMetadata['attributes']
+    attributes?: BatchMetadata['attributes'],
+    external_url?: string
   ): Promise<{ metadataHash: string; imageHash?: string; metadata: BatchMetadata }> {
     try {
       let imageHash: string | undefined;
@@ -251,7 +257,7 @@ export class PinataService {
       }
 
       // Create metadata
-      const metadata = this.createBatchMetadata(name, description, imageHash, properties, attributes);
+      const metadata = this.createBatchMetadata(name, description, imageHash, properties, attributes, external_url);
 
       // Upload metadata
       console.log('Uploading metadata to IPFS...');
